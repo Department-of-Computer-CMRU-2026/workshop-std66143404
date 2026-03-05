@@ -298,7 +298,7 @@
                     </svg>
                 </div>
                 <div>
-                    <div class="nav-title">Workshop System</div>
+                    <div class="nav-title">Workshop Systemmmm</div>
                     <div class="nav-sub">Senior-to-Junior</div>
                 </div>
             </a>
