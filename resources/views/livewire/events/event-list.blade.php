@@ -55,15 +55,21 @@
                             </div>
                         </div>
                         
-                        <div class="bg-zinc-50 dark:bg-zinc-800/50 p-4 rounded-xl border border-zinc-100 dark:border-zinc-700/50">
-                            <div class="flex justify-between items-center mb-1">
-                                <span class="text-xs text-black dark:text-zinc-500 font-bold">ความจุที่นั่ง</span>
-                                <span class="text-xs font-black text-black dark:text-white">{{ $registeredCount }} / {{ $event->total_seats }}</span>
+                        <div class="bg-zinc-50 dark:bg-zinc-800/50 p-4 rounded-xl border border-zinc-100 dark:border-zinc-700/50 flex items-center justify-between">
+                            <div>
+                                <p class="text-xs text-black dark:text-zinc-500 font-bold mb-1">ความจุที่นั่ง</p>
+                                <div class="flex items-baseline gap-1">
+                                    <span class="text-2xl font-black text-indigo-600 dark:text-indigo-400">{{ $registeredCount }}</span>
+                                    <span class="text-sm text-black dark:text-zinc-500 font-medium">/ {{ $event->total_seats }}</span>
+                                </div>
                             </div>
-                            <div class="w-full h-1.5 bg-zinc-200 dark:bg-zinc-700 rounded-full overflow-hidden">
-                                <div class="h-full bg-indigo-500 rounded-full" style="width: {{ ($registeredCount / $event->total_seats) * 100 }}%"></div>
+                            <div class="text-right">
+                                <p class="text-[10px] text-black dark:text-zinc-500 font-bold uppercase tracking-wider mb-1">คงเหลือ</p>
+                                <div class="px-3 py-1 bg-indigo-500/10 border border-indigo-500/20 rounded-lg">
+                                    <span class="text-sm font-black text-indigo-600 dark:text-indigo-400">{{ $event->remaining_seats }}</span>
+                                    <span class="text-[10px] font-bold text-indigo-600/70 dark:text-indigo-400/70 ml-1">ที่นั่ง</span>
+                                </div>
                             </div>
-                            <p class="text-[10px] mt-2 text-black dark:text-zinc-500">คงเหลือ <span class="text-indigo-600 dark:text-indigo-400 font-black">{{ $event->remaining_seats }}</span> ที่นั่ง</p>
                         </div>
                     </div>
                     
