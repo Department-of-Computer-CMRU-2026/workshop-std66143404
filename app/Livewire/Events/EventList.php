@@ -55,6 +55,6 @@ class EventList extends Component
             'events' => $events,
             'registeredEventIds' => $registeredEventIds,
             'registrationCount' => $registrationCount
-        ])->layout('layouts.student')->title(__('Workshops'));
+        ])->layout('layouts.app')->title(__('Workshops'));
     }
 }

@@ -88,8 +88,8 @@
                         
                         <div class="bg-zinc-50 dark:bg-zinc-800/50 rounded-2xl p-5 mb-4 border border-zinc-100 dark:border-white/5">
                             <div class="flex justify-between items-end mb-2">
-                                <p class="text-[10px] font-black uppercase tracking-widest text-zinc-400">จำนวนความจุ</p>
-                                <p class="text-sm font-black">{{ $registeredCount }} <span class="text-zinc-400 text-xs font-medium">/ {{ $event->total_seats }}</span></p>
+                                <p class="text-[10px] font-black uppercase tracking-widest text-zinc-400">สถานะที่นั่ง</p>
+                                <p class="text-sm font-black">ลงทะเบียนแล้ว {{ $registeredCount }} <span class="text-zinc-400 text-xs font-medium">/ {{ $event->total_seats }} คน</span></p>
                             </div>
                             <div class="w-full h-2 bg-zinc-200 dark:bg-zinc-700 rounded-full overflow-hidden">
                                 <div class="h-full bg-indigo-600 transition-all duration-1000" style="width: {{ ($registeredCount / $event->total_seats) * 100 }}%"></div>
