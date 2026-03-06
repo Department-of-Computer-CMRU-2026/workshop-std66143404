@@ -44,13 +44,17 @@ class EventList extends Component
     public function render()
     {
         $user = Auth::user();
-        $registeredEventIds = $user->registrations->pluck('event_id')->toArray();
+
+        $registrations = $user->registrations()->get();
+        $registeredEventIds = $registrations->pluck('event_id')->toArray();
+        $registrationCount = $registrations->count();
+
         $events = Event::withCount('registrations')->get();
 
         return view('livewire.events.event-list', [
             'events' => $events,
             'registeredEventIds' => $registeredEventIds,
-            'registrationCount' => count($registeredEventIds)
-        ])->layout('layouts.app')->title('Events');
+            'registrationCount' => $registrationCount
+        ])->layout('layouts.student')->title(__('Workshops'));
     }
 }

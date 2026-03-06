@@ -1,78 +1,141 @@
-
-    <div>
-        <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-            
+<div class="py-12 px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+        {{-- Flash Messages --}}
+        <div class="mb-10 space-y-4">
             @if (session()->has('message'))
-                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
-                    <span class="block sm:inline">{{ session('message') }}</span>
+                <div class="p-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 rounded-2xl backdrop-blur-md flex items-center space-x-3 shadow-xl shadow-emerald-500/5">
+                    <flux:icon.check-circle size="sm" variant="mini" />
+                    <span class="font-bold text-sm">{{ session('message') }}</span>
                 </div>
             @endif
             
             @if (session()->has('error'))
-                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
-                    <span class="block sm:inline">{{ session('error') }}</span>
+                <div class="p-4 bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 rounded-2xl backdrop-blur-md flex items-center space-x-3 shadow-xl shadow-rose-500/5">
+                    <flux:icon.exclamation-triangle size="sm" variant="mini" />
+                    <span class="font-bold text-sm">{{ session('error') }}</span>
                 </div>
             @endif
+        </div>
 
-            <div class="mb-6 bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                <h2 class="text-2xl font-bold text-gray-800">Workshop ที่เปิดรับสมัคร</h2>
-                <p class="mt-1 text-gray-600">คุณลงทะเบียนแล้ว <strong>{{ $registrationCount }} / 3</strong> หัวข้อ</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                @foreach($events as $event)
-                    @php
-                        $isRegistered = in_array($event->id, $registeredEventIds);
-                        $isFull = $event->remaining_seats <= 0;
-                        $reachedLimit = $registrationCount >= 3;
-                    @endphp
-                    <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
-                        <div class="p-6">
-                            <div class="flex justify-between items-start mb-4">
-                                <h3 class="text-xl font-bold text-gray-900">{{ $event->title }}</h3>
-                                @if($isRegistered)
-                                    <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full font-semibold">ลงทะเบียนแล้ว</span>
-                                @elseif($isFull)
-                                    <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full font-semibold">เต็มแล้ว</span>
-                                @endif
-                            </div>
-                            
-                            <p class="text-gray-600 mb-2"><span class="font-semibold">วิทยากร:</span> {{ $event->speaker }}</p>
-                            <p class="text-gray-600 mb-4"><span class="font-semibold">สถานที่:</span> {{ $event->location }}</p>
-                            
-                            <div class="flex justify-between items-center mb-6">
-                                <span class="text-sm text-gray-500 border rounded px-2 py-1 bg-gray-50">
-                                    ที่นั่งว่าง {{ $event->remaining_seats }} / {{ $event->total_seats }} ที่นั่ง
-                                </span>
-                            </div>
-                            
-                            @if($isRegistered)
-                                <button disabled class="w-full bg-gray-300 text-gray-600 font-bold py-2 px-4 rounded cursor-not-allowed">
-                                    ลงทะเบียนแล้ว
-                                </button>
-                            @elseif($isFull)
-                                <button disabled class="w-full bg-red-100 text-red-500 border border-red-200 font-bold py-2 px-4 rounded cursor-not-allowed">
-                                    ปิดรับสมัคร
-                                </button>
-                            @elseif($reachedLimit)
-                                <button disabled class="w-full bg-gray-200 text-gray-500 font-bold py-2 px-4 rounded cursor-not-allowed" title="คุณลงทะเบียนครบ 3 หัวข้อแล้ว">
-                                    ครบโควต้าแล้ว
-                                </button>
-                            @else
-                                <button wire:click="register({{ $event->id }})" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition">
-                                    ลงทะเบียน
-                                </button>
-                            @endif
-                        </div>
-                    </div>
-                @endforeach
+        {{-- Welcome Header --}}
+        <div class="relative mb-16">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                <div>
+                    <flux:heading size="xl" class="text-4xl lg:text-5xl font-black tracking-tight leading-none">
+                        สำรวจ <span class="text-indigo-600 italic">Workshops</span>
+                    </flux:heading>
+                    <flux:subheading size="lg" class="mt-4 text-zinc-500 max-w-xl font-medium">
+                        ค้นหาและเข้าร่วมกิจกรรมที่ช่วยยกระดับทักษะของคุณไปอีกขั้น พร้อมใบประกาศนียบัตรเมื่อเรียนจบ
+                    </flux:subheading>
+                </div>
                 
-                @if(count($events) === 0)
-                    <div class="col-span-full bg-white rounded-lg shadow p-6 text-center text-gray-500">
-                        ยังไม่มี Workshop ที่เปิดรับสมัครในขณะนี้
+                <div class="inline-flex items-center gap-4 bg-white dark:bg-zinc-800 p-2 rounded-2xl border border-zinc-200 dark:border-zinc-700 shadow-sm transition-all hover:shadow-md">
+                    <div class="bg-indigo-600 text-white p-3 rounded-xl shadow-indigo-500/20 shadow-lg">
+                        <flux:icon.calendar size="sm" />
                     </div>
-                @endif
+                    <div class="pr-6">
+                        <p class="text-[10px] font-black uppercase tracking-wider text-zinc-400 leading-none mb-1">สถานะการลงทะเบียน</p>
+                        <p class="text-lg font-black leading-none">{{ $registrationCount }} <span class="text-zinc-400 font-medium">/ 3 หัวข้อ</span></p>
+                    </div>
+                </div>
             </div>
         </div>
+
+        {{-- Events Grid --}}
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 lg:gap-10">
+            @foreach($events as $event)
+                @php
+                    $isRegistered = in_array($event->id, $registeredEventIds);
+                    $registeredCount = $event->registrations_count;
+                    $isFull = $event->remaining_seats <= 0;
+                    $reachedLimit = $registrationCount >= 3;
+                @endphp
+                
+                <div class="group relative flex flex-col bg-white dark:bg-zinc-900 rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 p-10 transition-all duration-500 hover:shadow-2xl hover:shadow-indigo-500/10 hover:-translate-y-2 overflow-hidden">
+                    {{-- Card Decoration --}}
+                    <div class="absolute top-0 right-0 size-32 bg-indigo-500/5 rounded-bl-[4rem] pointer-events-none group-hover:scale-110 transition-transform duration-500"></div>
+                    
+                    <div class="flex-grow relative z-10">
+                        <div class="flex justify-between items-start gap-4 mb-8">
+                            <flux:heading size="lg" class="font-black text-2xl group-hover:text-indigo-600 transition-colors">{{ $event->title }}</flux:heading>
+                            @if($isRegistered)
+                                <flux:badge variant="success" size="sm" class="rounded-full px-3 py-1 font-black italic">REGISTERED</flux:badge>
+                            @elseif($isFull)
+                                <flux:badge variant="danger" size="sm" class="rounded-full px-3 py-1 font-black italic uppercase">Sold Out</flux:badge>
+                            @endif
+                        </div>
+                        
+                        <div class="space-y-5 mb-10">
+                            <div class="flex items-center gap-4 group/icon">
+                                <div class="size-10 rounded-xl bg-zinc-50 dark:bg-zinc-800 flex items-center justify-center text-zinc-400 group-hover/icon:bg-indigo-600 group-hover/icon:text-white transition-all">
+                                    <flux:icon.user size="sm" />
+                                </div>
+                                <div>
+                                    <p class="text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-0.5">วิทยากร</p>
+                                    <p class="font-bold text-zinc-800 dark:text-zinc-200">{{ $event->speaker }}</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4 group/icon">
+                                <div class="size-10 rounded-xl bg-zinc-50 dark:bg-zinc-800 flex items-center justify-center text-zinc-400 group-hover/icon:bg-indigo-600 group-hover/icon:text-white transition-all text-xs font-bold leading-none">
+                                    <flux:icon.map-pin size="sm" />
+                                </div>
+                                <div>
+                                    <p class="text-[10px] font-black uppercase tracking-widest text-zinc-400 mb-0.5">สถานที่</p>
+                                    <p class="font-bold text-zinc-800 dark:text-zinc-200">{{ $event->location }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-zinc-50 dark:bg-zinc-800/50 rounded-2xl p-5 mb-4 border border-zinc-100 dark:border-white/5">
+                            <div class="flex justify-between items-end mb-2">
+                                <p class="text-[10px] font-black uppercase tracking-widest text-zinc-400">จำนวนความจุ</p>
+                                <p class="text-sm font-black">{{ $registeredCount }} <span class="text-zinc-400 text-xs font-medium">/ {{ $event->total_seats }}</span></p>
+                            </div>
+                            <div class="w-full h-2 bg-zinc-200 dark:bg-zinc-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-indigo-600 transition-all duration-1000" style="width: {{ ($registeredCount / $event->total_seats) * 100 }}%"></div>
+                            </div>
+                            <p class="text-[10px] text-zinc-500 mt-2 font-medium">ว่าง <span class="font-black text-indigo-600 dark:text-indigo-400">{{ $event->remaining_seats }}</span> ที่นั่ง</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 relative z-10">
+                        @if($isRegistered)
+                            <flux:button disabled variant="filled" class="w-full py-4 rounded-[1.25rem] font-black tracking-wider text-sm bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-none">
+                                ลงทะเบียนแล้ว
+                            </flux:button>
+                        @elseif($isFull)
+                            <flux:button disabled variant="ghost" class="w-full py-4 rounded-[1.25rem] font-black tracking-wider text-sm opacity-50 italic">
+                                ปิดรับสมัคร (ที่นั่งเต็ม)
+                            </flux:button>
+                        @elseif($reachedLimit)
+                            <div class="w-full py-4 rounded-[1.25rem] bg-zinc-100 dark:bg-zinc-800 text-zinc-400 font-black text-xs text-center border border-dashed border-zinc-200 dark:border-zinc-700">
+                                ครบโควต้า 3 หัวข้อแล้ว
+                            </div>
+                        @else
+                            <flux:button 
+                                wire:click="register({{ $event->id }})" 
+                                wire:loading.attr="disabled"
+                                variant="primary"
+                                class="w-full py-4 rounded-[1.25rem] font-black tracking-wider text-sm bg-indigo-600 hover:bg-indigo-700 shadow-xl shadow-indigo-600/20 border-none transition-all active:scale-[0.98]"
+                            >
+                                <span wire:loading.remove wire:target="register({{ $event->id }})">ลงทะเบียนเข้าร่วม</span>
+                                <span wire:loading wire:target="register({{ $event->id }})">กำลังประมวลผล...</span>
+                            </flux:button>
+                        @endif
+                    </div>
+                </div>
+            @endforeach
+            
+            @if(count($events) === 0)
+                <div class="col-span-full py-32 text-center bg-white dark:bg-zinc-900 rounded-[3rem] border border-dashed border-zinc-200 dark:border-zinc-800">
+                    <div class="size-20 bg-zinc-100 dark:bg-zinc-800 rounded-full flex items-center justify-center mx-auto mb-6 text-zinc-400">
+                        <flux:icon.information-circle size="lg" />
+                    </div>
+                    <flux:heading size="lg" class="font-black">ไม่พบข้อมูลหัวข้อที่เปิดรับสมัคร</flux:heading>
+                    <flux:subheading class="mt-2">โปรดติดตามข่าวสารความเคลื่อนไหวผ่านช่องทางประกาศสถาบัน</flux:subheading>
+                </div>
+            @endif
+        </div>
     </div>
+</div>
 
